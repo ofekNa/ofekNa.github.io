@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ofek Nahary — EE & CS Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e1a; --bg2: #111827; --bg3: #1a2035;
+    --cyan: #00d4ff; --amber: #f0a500;
+    --text: #e8eaf0; --muted: #8892a4;
+    --border: rgba(0, 212, 255, 0.15);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2.5rem; background: rgba(10,14,26,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: var(--font-mono); font-size: 14px; color: var(--cyan); text-decoration: none; letter-spacing: 0.05em; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; font-family: var(--font-display); }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--cyan); border-radius: 2px; }
+
+  /* SECTIONS */
+  section { padding: 6rem 0; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+  /* HERO */
+  #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 80px; position: relative; overflow: hidden; }
+  .hero-inner { display: flex; align-items: center; gap: 3.5rem; }
+  .hero-text { flex: 1; min-width: 0; }
+  .hero-photo-wrap { flex-shrink: 0; }
+  .hero-photo {
+    width: 190px; height: 190px; border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--cyan);
+    box-shadow: 0 0 40px rgba(0,212,255,0.18);
+    display: block;
+  }
+  .hero-photo-placeholder {
+    width: 190px; height: 190px; border-radius: 50%;
+    border: 2px dashed rgba(0,212,255,0.4);
+    background: var(--bg3);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--muted); font-family: var(--font-mono); font-size: 10px; text-align: center; gap: 0.4rem;
+  }
+  .hero-photo-placeholder .photo-icon { font-size: 32px; }
+  .hero-eyebrow { font-family: var(--font-mono); font-size: 13px; color: var(--cyan); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.25rem; }
+  h1 { font-family: var(--font-display); font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.05; color: var(--text); margin-bottom: 0.5rem; }
+  .hero-subtitle { font-family: var(--font-display); font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 300; color: var(--text); margin-bottom: 2rem; }
+  .hero-subtitle span { color: var(--text); font-weight: 500; }
+  .hero-desc { font-size: 17px; color: var(--text); max-width: 520px; line-height: 1.75; margin-bottom: 2.5rem; }
+  .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { display: inline-block; padding: 0.75rem 1.75rem; background: var(--cyan); color: #0a0e1a; font-family: var(--font-display); font-weight: 600; font-size: 15px; text-decoration: none; border-radius: 4px; transition: opacity 0.2s, transform 0.15s; }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-outline { display: inline-block; padding: 0.75rem 1.75rem; border: 1px solid var(--border); color: var(--text); font-family: var(--font-display); font-weight: 500; font-size: 15px; text-decoration: none; border-radius: 4px; transition: border-color 0.2s, color 0.2s; }
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+  .oscilloscope { position: absolute; right: -60px; top: 50%; transform: translateY(-50%); opacity: 0.18; pointer-events: none; }
+
+  /* SHARED */
+  .section-label { font-family: var(--font-mono); font-size: 12px; color: var(--cyan); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 600; color: var(--text); margin-bottom: 3rem; }
+  h2 .accent { color: var(--cyan); }
+  .divider { width: 40px; height: 2px; background: var(--cyan); margin-bottom: 2rem; }
+
+  /* ABOUT — your color changes kept */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-text p { color: var(--text); margin-bottom: 1rem; font-size: 16px; }
+  .about-text p strong { color: var(--text); }
+  .about-meta { display: flex; flex-direction: column; gap: 1rem; }
+  .meta-item { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.25rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; }
+  .meta-icon { font-size: 22px; color: var(--amber); flex-shrink: 0; margin-top: 2px; }
+  .meta-label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .meta-value { font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--text); }
+
+  /* SKILLS */
+  #skills { background: var(--bg2); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+  .skill-card { padding: 1.5rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; transition: border-color 0.2s; }
+  .skill-card:hover { border-color: rgba(0,212,255,0.4); }
+  .skill-cat { font-family: var(--font-mono); font-size: 11px; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+  .skill-card h3 { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin-bottom: 0.75rem; color: var(--text); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: var(--font-mono); font-size: 11px; padding: 3px 8px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); border-radius: 3px; color: var(--muted); }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; gap: 2rem; }
+  .project-card { display: grid; grid-template-columns: 1fr 2fr; gap: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.25s, transform 0.2s; }
+  .project-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-2px); }
+  .project-visual { background: var(--bg2); display: flex; align-items: center; justify-content: center; padding: 2rem; border-right: 1px solid var(--border); min-height: 240px; }
+  .project-body { padding: 2rem; }
+  .project-type { font-family: var(--font-mono); font-size: 11px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.6rem; }
+  .project-body h3 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; }
+  .project-body p { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 1.25rem; }
+  .project-links { display: flex; gap: 1rem; }
+  .link-btn { font-family: var(--font-mono); font-size: 12px; color: var(--cyan); text-decoration: none; border: 1px solid rgba(0,212,255,0.3); padding: 5px 12px; border-radius: 3px; transition: background 0.2s; }
+  .link-btn:hover { background: rgba(0,212,255,0.1); }
+
+  /* RESUME */
+  #resume { background: var(--bg2); }
+  .resume-inner { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 3rem; }
+  .resume-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .resume-row:last-child { border-bottom: none; }
+  .resume-left { flex: 0 0 160px; }
+  .resume-period { font-family: var(--font-mono); font-size: 12px; color: var(--cyan); }
+  .resume-content { flex: 1; padding-left: 2rem; }
+  .resume-content h4 { font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .resume-org { font-size: 14px; color: var(--amber); margin-bottom: 0.5rem; }
+  .resume-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+  .resume-cta { text-align: center; margin-top: 2.5rem; }
+
+  /* CONTACT */
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .contact-text h2 { margin-bottom: 1rem; }
+  .contact-text p { color: var(--muted); margin-bottom: 2rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; text-decoration: none; color: var(--text); font-family: var(--font-display); font-size: 15px; transition: border-color 0.2s; }
+  .contact-link:hover { border-color: rgba(0,212,255,0.5); }
+  .contact-link-icon { font-size: 20px; color: var(--cyan); }
+  .contact-link small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; right: 0; background: rgba(10,14,26,0.98); border-bottom: 1px solid var(--border); padding: 0.5rem 0; }
+    .nav-links.open { display: flex; }
+    .nav-links li a { display: block; padding: 0.75rem 1.5rem; font-size: 15px; }
+    .nav-hamburger { display: flex; }
+    .oscilloscope { display: none; }
+    section { padding: 3.5rem 0; }
+    .hero-inner { flex-direction: column-reverse; gap: 2rem; text-align: center; align-items: center; }
+    .hero-photo, .hero-photo-placeholder { width: 140px; height: 140px; }
+    .hero-desc { max-width: 100%; font-size: 15px; }
+    .btn-group { justify-content: center; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .project-card { grid-template-columns: 1fr; }
+    .project-visual { min-height: 140px; border-right: none; border-bottom: 1px solid var(--border); padding: 1.5rem; }
+    .resume-inner { padding: 1.25rem; }
+    .resume-row { flex-direction: column; gap: 0.4rem; }
+    .resume-content { padding-left: 0; }
+    .resume-left { flex: none; }
+    .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  @media (max-width: 480px) {
+    .hero-photo, .hero-photo-placeholder { width: 120px; height: 120px; }
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">// ofek.nahary</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+    <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+    <li><a href="#resume" onclick="closeMenu()">Resume</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-eyebrow">Available for internships &amp; junior roles</div>
+        <h1>Ofek Nahary</h1>
+        <div class="hero-subtitle">EE &amp; CS Student — <span>Software &amp; Engineering Intern</span></div>
+        <p class="hero-desc">
+          Third-year Electrical Engineering and Computer Science student at the Hebrew University of Jerusalem.
+          Strong background in software, algorithms, operating systems, computer architecture, and signal processing.
+          Leadership experience as an IDF officer and shift manager at the Bank of Israel.
+        </p>
+        <div class="btn-group">
+          <a href="#projects" class="btn-primary">View My Work</a>
+          <a href="#contact" class="btn-outline">Get In Touch</a>
+        </div>
+      </div>
+      <div class="hero-photo-wrap">
+        <!-- Upload your photo to GitHub as "photo.jpg" alongside index.html -->
+        <img src="photo.jpg" alt="Ofek Nahary" class="hero-photo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="hero-photo-placeholder" style="display:none;">
+          <span class="photo-icon">📷</span>
+          Upload photo.jpg<br>to GitHub
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg class="oscilloscope" width="520" height="420" viewBox="0 0 520 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="518" height="418" rx="8" stroke="#00d4ff" stroke-width="1.5"/>
+    <line x1="0" y1="84" x2="520" y2="84" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <line x1="0" y1="168" x2="520" y2="168" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <line x1="0" y1="210" x2="520" y2="210" stroke="#00d4ff" stroke-width="0.8" opacity="0.6"/>
+    <line x1="0" y1="252" x2="520" y2="252" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <line x1="0" y1="336" x2="520" y2="336" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <line x1="104" y1="0" x2="104" y2="420" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <line x1="208" y1="0" x2="208" y2="420" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <line x1="260" y1="0" x2="260" y2="420" stroke="#00d4ff" stroke-width="0.8" opacity="0.6"/>
+    <line x1="312" y1="0" x2="312" y2="420" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <line x1="416" y1="0" x2="416" y2="420" stroke="#00d4ff" stroke-width="0.4" opacity="0.5"/>
+    <path d="M0,210 C20,210 30,210 40,210 L60,210 C70,210 75,140 90,100 C105,60 115,60 130,100 C145,140 150,210 160,210 L180,210 C190,210 195,280 210,320 C225,360 235,360 250,320 C265,280 270,210 280,210 L300,210 C310,210 315,120 330,80 C345,40 355,40 370,80 C385,120 390,210 400,210 L420,210 C430,210 435,260 450,290 C465,320 470,320 485,290 C500,260 510,210 520,210" stroke="#00d4ff" stroke-width="2" fill="none" opacity="0.9"/>
+    <path d="M0,210 C20,210 28,150 45,130 C62,110 78,130 95,170 C112,210 120,250 140,270 C160,290 170,290 190,270 C210,250 218,210 238,170 C258,130 268,110 288,130 C308,150 316,210 336,250 C356,290 366,290 386,270 C406,250 414,210 434,170 C454,130 464,110 484,130 C504,150 512,180 520,210" stroke="#f0a500" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <text x="10" y="20" font-family="JetBrains Mono, monospace" font-size="11" fill="#00d4ff" opacity="0.7">CH1 1V/div</text>
+    <text x="160" y="20" font-family="JetBrains Mono, monospace" font-size="11" fill="#f0a500" opacity="0.7">CH2 500mV/div</text>
+    <text x="430" y="20" font-family="JetBrains Mono, monospace" font-size="11" fill="#00d4ff" opacity="0.7">1kHz</text>
+    <line x1="380" y1="0" x2="380" y2="420" stroke="#00d4ff" stroke-width="1" opacity="0.4">
+      <animateTransform attributeName="transform" type="translate" from="-380,0" to="140,0" dur="3s" repeatCount="indefinite"/>
+    </line>
+    <text x="10" y="410" font-family="JetBrains Mono, monospace" font-size="10" fill="#00d4ff" opacity="0.5">TRIG AUTO</text>
+    <circle cx="490" cy="408" r="3" fill="#00ff88" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="section-label">01 / About</div>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a third-year <strong>Electrical Engineering &amp; Computer Science</strong> student at the <strong>Hebrew University of Jerusalem</strong>, building a solid foundation across both software and hardware disciplines.</p>
+        <p>My background covers <strong>algorithms, operating systems, computer architecture, and signal processing</strong>, with hands-on experience in C/C++, Python, Java, and MATLAB.</p>
+        <p>Beyond engineering, I bring real <strong>leadership experience</strong> — as an IDF officer and as a shift manager at the Bank of Israel — giving me a practical, team-oriented mindset alongside my technical skills.</p>
+        <p>I'm actively seeking a <strong>software or engineering internship</strong> where I can contribute and grow.</p>
+      </div>
+      <div class="about-meta">
+        <div class="meta-item">
+          <span class="meta-icon">🎓</span>
+          <div>
+            <div class="meta-label">Degree</div>
+            <div class="meta-value">B.Sc. EE &amp; CS — Year 3</div>
+          </div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">🏛️</span>
+          <div>
+            <div class="meta-label">University</div>
+            <div class="meta-value">Hebrew University of Jerusalem</div>
+          </div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">🔧</span>
+          <div>
+            <div class="meta-label">Focus Areas</div>
+            <div class="meta-value">Software · Algorithms · Signal Processing</div>
+          </div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">📬</span>
+          <div>
+            <div class="meta-label">Open To</div>
+            <div class="meta-value">Software &amp; Engineering Internships</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="section-label">02 / Skills</div>
+    <div class="divider"></div>
+    <h2>What I Work <span class="accent">With</span></h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-cat">Languages</div>
+        <h3>Programming</h3>
+        <div class="tags">
+          <span class="tag">C</span><span class="tag">C++</span><span class="tag">Python</span><span class="tag">Java</span><span class="tag">MATLAB</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">CS Foundations</div>
+        <h3>Software &amp; Systems</h3>
+        <div class="tags">
+          <span class="tag">Algorithms</span><span class="tag">Data Structures</span><span class="tag">Operating Systems</span><span class="tag">Computer Architecture</span><span class="tag">Linux</span><span class="tag">Git</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">Signal Processing</div>
+        <h3>DSP &amp; Math</h3>
+        <div class="tags">
+          <span class="tag">FFT / DFT</span><span class="tag">FIR / IIR Filters</span><span class="tag">MATLAB</span><span class="tag">NumPy / SciPy</span><span class="tag">Linear Algebra</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat">Machine Learning</div>
+        <h3>AI &amp; Data</h3>
+        <div class="tags">
+          <span class="tag">PyTorch</span><span class="tag">scikit-learn</span><span class="tag">CNNs</span><span class="tag">Pandas</span><span class="tag">Data Analysis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="section-label">03 / Projects</div>
+    <div class="divider"></div>
+    <h2>Selected <span class="accent">Work</span></h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-visual">
+          <svg width="160" height="120" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="60" r="50" stroke="#00d4ff" stroke-width="0.5" opacity="0.2"/>
+            <circle cx="80" cy="60" r="35" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+            <circle cx="80" cy="60" r="20" stroke="#00d4ff" stroke-width="0.5" opacity="0.4"/>
+            <circle cx="80" cy="60" r="6" fill="#00d4ff" opacity="0.6"/>
+            <line x1="80" y1="8" x2="80" y2="112" stroke="#00d4ff" stroke-width="0.4" opacity="0.25"/>
+            <line x1="28" y1="60" x2="132" y2="60" stroke="#00d4ff" stroke-width="0.4" opacity="0.25"/>
+            <line x1="80" y1="60" x2="126" y2="22" stroke="#00d4ff" stroke-width="1.5" opacity="0.8"/>
+            <circle cx="118" cy="28" r="4" fill="#f0a500" opacity="0.9"/>
+            <circle cx="118" cy="28" r="8" stroke="#f0a500" stroke-width="0.8" opacity="0.4"/>
+            <circle cx="48" cy="38" r="3" fill="#00d4ff" opacity="0.6"/>
+            <text x="88" y="44" font-family="JetBrains Mono, monospace" font-size="8" fill="#00d4ff" opacity="0.5">r1</text>
+            <text x="100" y="32" font-family="JetBrains Mono, monospace" font-size="8" fill="#f0a500" opacity="0.8">TGT</text>
+          </svg>
+        </div>
+        <div class="project-body">
+          <div class="project-type">MATLAB / Signal Processing</div>
+          <h3>Radar Signal Detection &amp; Localization</h3>
+          <p>Implemented matched-filter and MAP detectors for signal detection in noisy channels. Estimated signal delays and target positions using correlation-based ranging and triangulation. Applied advanced signal processing and statistical inference techniques.</p>
+          <div class="tags" style="margin-bottom:1.25rem;">
+            <span class="tag">MATLAB</span><span class="tag">Matched Filter</span><span class="tag">MAP Detector</span><span class="tag">Triangulation</span><span class="tag">DSP</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/ofekNa/matched-filter-radar-localization" class="link-btn">GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual">
+          <svg width="160" height="120" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="8" y1="112" x2="152" y2="112" stroke="#8892a4" stroke-width="1"/>
+            <rect x="12" y="70" width="10" height="42" fill="#00d4ff" opacity="0.3" rx="2"/>
+            <rect x="26" y="50" width="10" height="62" fill="#00d4ff" opacity="0.45" rx="2"/>
+            <rect x="40" y="20" width="10" height="92" fill="#00d4ff" opacity="0.9" rx="2"/>
+            <rect x="54" y="55" width="10" height="57" fill="#f0a500" opacity="0.6" rx="2"/>
+            <rect x="68" y="75" width="10" height="37" fill="#f0a500" opacity="0.45" rx="2"/>
+            <rect x="82" y="40" width="10" height="72" fill="#00d4ff" opacity="0.5" rx="2"/>
+            <rect x="96" y="60" width="10" height="52" fill="#f0a500" opacity="0.35" rx="2"/>
+            <rect x="110" y="85" width="10" height="27" fill="#00d4ff" opacity="0.25" rx="2"/>
+            <rect x="124" y="90" width="10" height="22" fill="#f0a500" opacity="0.2" rx="2"/>
+            <rect x="138" y="95" width="10" height="17" fill="#00d4ff" opacity="0.15" rx="2"/>
+            <text x="8" y="10" font-family="JetBrains Mono, monospace" font-size="9" fill="#00d4ff" opacity="0.7">accuracy</text>
+            <text x="8" y="118" font-family="JetBrains Mono, monospace" font-size="9" fill="#8892a4">model</text>
+          </svg>
+        </div>
+        <div class="project-body">
+          <div class="project-type">Python / Machine Learning</div>
+          <h3>Machine Learning &amp; Data Analysis</h3>
+          <p>Implemented and evaluated machine learning models including SVM, KNN, Decision Trees, and polynomial regression. Performed data preprocessing, model training, and performance analysis on real-world datasets.</p>
+          <div class="tags" style="margin-bottom:1.25rem;">
+            <span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">SVM</span><span class="tag">KNN</span><span class="tag">Decision Trees</span><span class="tag">Pandas</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/ofekNa/machine-learning-course-project" class="link-btn">GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="resume">
+  <div class="container">
+    <div class="section-label">04 / Resume</div>
+    <div class="divider"></div>
+    <h2>Background &amp; <span class="accent">Education</span></h2>
+    <div class="resume-inner">
+      <div class="resume-row">
+        <div class="resume-left"><div class="resume-period">2022 — Present</div></div>
+        <div class="resume-content">
+          <h4>B.Sc. Electrical Engineering &amp; Computer Science</h4>
+          <div class="resume-org">Hebrew University of Jerusalem</div>
+          <div class="resume-desc">Relevant courses: Digital Signal Processing, Algorithms &amp; Data Structures, Operating Systems, Computer Architecture, Machine Learning, Digital Circuits, Linear Algebra.</div>
+        </div>
+      </div>
+      <div class="resume-row">
+        <div class="resume-left"><div class="resume-period">2019 — 2022</div></div>
+        <div class="resume-content">
+          <h4>Officer</h4>
+          <div class="resume-org">Israel Defense Forces (IDF)</div>
+          <div class="resume-desc">Led a team in a demanding operational environment. Developed strong leadership, decision-making under pressure, and organizational skills.</div>
+        </div>
+      </div>
+      <div class="resume-row">
+        <div class="resume-left"><div class="resume-period">Past</div></div>
+        <div class="resume-content">
+          <h4>Shift Manager</h4>
+          <div class="resume-org">Bank of Israel</div>
+          <div class="resume-desc">Managed a team during shifts, coordinating operations and ensuring high standards of performance in a professional financial environment.</div>
+        </div>
+      </div>
+    </div>
+    <div class="resume-cta">
+      <a href="resume.pdf" class="btn-primary" download>Download My CV (PDF)</a>
+      <p style="margin-top:1rem; font-size:13px; color:var(--muted); font-family:var(--font-mono);">
+        Upload a file named <code style="color:var(--cyan);">resume.pdf</code> to your GitHub repo alongside <code style="color:var(--cyan);">index.html</code>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="contact-text">
+        <div class="section-label">05 / Contact</div>
+        <div class="divider"></div>
+        <h2>Let's <span class="accent">Connect</span></h2>
+        <p>I'm actively looking for software and engineering internships. If you're working on something interesting — I'd love to hear from you.</p>
+        <a href="mailto:Onahary90@gmail.com" class="btn-primary">Send me an email</a>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:Onahary90@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉</span>
+          <div>
+            <div>Onahary90@gmail.com</div>
+            <small>Fastest way to reach me</small>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/ofek-nahary/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💼</span>
+          <div>
+            <div>linkedin.com/in/ofek-nahary</div>
+            <small>Professional profile</small>
+          </div>
+        </a>
+        <a href="https://github.com/ofekNa" target="_blank" class="contact-link">
+          <span class="contact-link-icon">&lt;/&gt;</span>
+          <div>
+            <div>github.com/ofekNa</div>
+            <small>Code &amp; projects</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built with HTML &amp; CSS · Ofek Nahary · 2025</p>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
+  function closeMenu() { document.getElementById('navLinks').classList.remove('open'); }
+</script>
+
+</body>
+</html>
